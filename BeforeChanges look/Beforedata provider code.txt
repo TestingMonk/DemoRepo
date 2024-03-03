@@ -1,0 +1,51 @@
+package tests;
+
+import java.io.IOException;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+
+import pageObjects.AccountPage;
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.Base;
+
+public class LoginTest extends Base {
+	WebDriver driver;
+	
+	@Test
+	public void login() throws IOException, InterruptedException {
+		
+		 driver = intializeDriver();
+		
+		driver.get(prop.getProperty("url"));
+		
+		LandingPage landingpage = new LandingPage(driver);
+		landingpage.myAccountDropdown().click();
+		landingpage.loginOption().click();
+		
+		Thread.sleep(3000);
+		
+		LoginPage loginpage = new LoginPage(driver);
+		loginpage.emailAddressField().sendKeys(prop.getProperty("email"));
+		loginpage.passwordField().sendKeys(prop.getProperty("password"));
+		loginpage.loginButton().submit();
+		
+		AccountPage accountpage = new AccountPage(driver);
+		Assert.assertTrue(accountpage.editAccountInformationOption().isDisplayed());
+		
+		
+		
+		
+		
+	}
+	
+	@AfterMethod
+	public void tearDown() {
+		
+		driver.close();
+	}
+
+}
